@@ -4,6 +4,8 @@ package client;
 import coders.MessageDecoder;
 import coders.MessageEncoder;
 import entities.Message;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 import javax.websocket.*;
@@ -11,6 +13,7 @@ import javax.websocket.*;
 
 @javax.websocket.ClientEndpoint(decoders = {MessageDecoder.class}, encoders = {MessageEncoder.class})
 public class ClientEndpoint {
+    private static final Logger log = LogManager.getLogger(ClientEndpoint.class);
 
     @OnOpen
     public void onOpen(Session session) {
@@ -26,6 +29,6 @@ public class ClientEndpoint {
 
     @OnError
     public void processError(Throwable t) {
-        t.printStackTrace();
+        log.error("Error : "+t);
     }
 }

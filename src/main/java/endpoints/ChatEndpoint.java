@@ -96,8 +96,7 @@ public class ChatEndpoint {
             chatMap.remove(session);
             log.info("Agent :"+msg.getName()+" /exit : ");
         }
-        else
-        {
+
             if(msg.getRole().equals("client")) {
                 log.info("Client :" + msg.getName() + " /exit: ");
             }
@@ -105,7 +104,7 @@ public class ChatEndpoint {
             {
                 log.info("Agent :"+msg.getName()+" /exit : ");
             }
-        }
+
         onClose(session);
     }
     private void logIn(Session session,Message msg){

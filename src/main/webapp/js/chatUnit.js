@@ -104,8 +104,6 @@ let chatUnit = {
                 check = true;
                 checkRegister = true;
                 this.openSocket();
-            } else {
-
             }
         } else {
             let div = document.createElement("div");

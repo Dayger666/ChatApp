@@ -1,6 +1,8 @@
 package client;
 
 import entities.Message;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 import javax.websocket.*;
@@ -12,6 +14,7 @@ import java.net.URI;
 
 //mvn exec:java -Dexec.mainClass=client.Client
 public class Client {
+    private static final Logger log = LogManager.getLogger(Client.class);
     private static Session session;
     private WebSocketContainer container = ContainerProvider.getWebSocketContainer();
     private BufferedReader inputUser;
@@ -45,7 +48,7 @@ public class Client {
             }
         } catch (IOException ignored) {
         } catch (DeploymentException | EncodeException e) {
-            e.printStackTrace();
+           log.error("Error : "+e);
         }
     }
 
@@ -69,7 +72,7 @@ public class Client {
                     System.out.println("Me: " + userWord);
                 }
             } catch (IOException | EncodeException e) {
-                e.printStackTrace();
+                log.error("Exception "+e);
             }
         }
     }
