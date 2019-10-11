@@ -1,7 +1,7 @@
-package coders;
+package com.coders;
 
 import com.google.gson.Gson;
-import entities.Message;
+import com.entities.Message;
 
 
 import javax.websocket.Decoder;

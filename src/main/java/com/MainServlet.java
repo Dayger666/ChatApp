@@ -1,4 +1,4 @@
-package servlets;
+package com;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,8 +9,9 @@ import java.io.IOException;
 
 @WebServlet("")
 public class MainServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/views/main.jsp").forward(req, resp);
+        req.getRequestDispatcher("main.jsp").forward(req, resp);
     }
 }

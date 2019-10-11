@@ -1,4 +1,4 @@
-package entities;
+package com.entities;
 
 import javax.websocket.EncodeException;
 import javax.websocket.Session;

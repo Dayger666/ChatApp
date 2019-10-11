@@ -1,11 +1,13 @@
-package endpoints;
+package com.endpoints;
 
-import coders.MessageDecoder;
-import coders.MessageEncoder;
-import entities.Message;
-import entities.Story;
+import com.coders.MessageDecoder;
+import com.coders.MessageEncoder;
+import com.entities.Message;
+import com.entities.Story;
+import com.storage.Agent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import com.storage.SessionList;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -20,7 +22,7 @@ public class ChatEndpoint {
     private static final Logger log = LogManager.getLogger(ChatEndpoint.class);
     private Story story = new Story();
     private Session agentSession = null;
-
+    private static SessionList storage = SessionList.getInstance();
     private static LinkedList<Session> sessionList = new LinkedList<>();
     private static LinkedList<Session> sessionListAvailableAgents = new LinkedList<>();
     private static LinkedHashMap<Session, Session> chatMap = new LinkedHashMap<>();
@@ -51,6 +53,10 @@ public class ChatEndpoint {
     @OnMessage
     public void onMessage(Session session, Message msg) {
         if(msg.getText().equals("")){
+            if(msg.getRole().equals("agent")){
+                Agent agent = new Agent(session, msg.getName());
+                storage.addAgent(agent);
+            }
             log.info(msg.getRole()+"|"+msg.getName()+" registered");
         }
         if (msg.getRole().equals("agent") && !sessionListAvailableAgents.contains(session) && !chatMap.containsKey(session)) {

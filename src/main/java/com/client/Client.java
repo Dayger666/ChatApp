@@ -1,6 +1,6 @@
-package client;
+package com.client;
 
-import entities.Message;
+import com.entities.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

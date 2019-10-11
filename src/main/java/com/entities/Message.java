@@ -1,9 +1,15 @@
-package entities;
+package com.entities;
 
 import lombok.Data;
 
 @Data
 public class Message {
+    public Message(String name, String role, String text,MessageType type) {
+        this.name = name;
+        this.role = role;
+        this.text = text;
+        this.type=type;
+    }
     public Message(String name, String role, String text) {
         this.name = name;
         this.role = role;
@@ -13,6 +19,8 @@ public class Message {
     private String name;
     private String role;
     private String text;
+    private MessageType type;
+    private int index=0;
 
     public void setText(String text) {
         this.text = text;

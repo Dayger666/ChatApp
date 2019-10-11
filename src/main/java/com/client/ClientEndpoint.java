@@ -1,9 +1,9 @@
-package client;
+package com.client;
 
 
-import coders.MessageDecoder;
-import coders.MessageEncoder;
-import entities.Message;
+import com.coders.MessageDecoder;
+import com.coders.MessageEncoder;
+import com.entities.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
