@@ -5,6 +5,8 @@ import com.coders.MessageEncoder;
 import com.entities.Message;
 import com.entities.Story;
 import com.storage.Agent;
+import com.storage.Chat;
+import com.storage.Client;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.storage.SessionList;
@@ -22,6 +24,9 @@ public class ChatEndpoint {
     private static final Logger log = LogManager.getLogger(ChatEndpoint.class);
     private Story story = new Story();
     private Session agentSession = null;
+    private Agent agent;
+    private Client client;
+    private Chat chat;
     private static SessionList storage = SessionList.getInstance();
     private static LinkedList<Session> sessionList = new LinkedList<>();
     private static LinkedList<Session> sessionListAvailableAgents = new LinkedList<>();
@@ -52,16 +57,17 @@ public class ChatEndpoint {
 
     @OnMessage
     public void onMessage(Session session, Message msg) {
-        if(msg.getText().equals("")){
-            if(msg.getRole().equals("agent")){
-                Agent agent = new Agent(session, msg.getName());
-                storage.addAgent(agent);
-            }
+        if (msg.getRole().equals("agent") && !SessionList.getAllAvailabelAgents().contains(agent) && !chatMap.containsKey(session)) {
+            agent = new Agent(session, msg.getName());
+            storage.addAgent(agent);
+            storage.addAvailableAgent(agent);
             log.info(msg.getRole()+"|"+msg.getName()+" registered");
         }
-        if (msg.getRole().equals("agent") && !sessionListAvailableAgents.contains(session) && !chatMap.containsKey(session)) {
-            sessionListAvailableAgents.add(session);
-            Collections.shuffle(sessionListAvailableAgents);
+        else if(msg.getRole().equals("client")&& !SessionList.getAllWaitingClients().contains(client)&&chatMap.get(this.agentSession)!=session)
+        {
+            client=new Client(session,msg.getName());
+            storage.addWaitingClient(client);
+            storage.addClient(client);
         }
         if (msg.getText().equals("/exit")) {
             exit(session, msg);
@@ -114,10 +120,14 @@ public class ChatEndpoint {
         onClose(session);
     }
     private void logIn(Session session,Message msg){
-        Collections.shuffle(sessionListAvailableAgents);
-        if (sessionList.contains(session) && !sessionListAvailableAgents.isEmpty() && !chatMap.containsKey(this.agentSession)) {
-            this.agentSession = sessionListAvailableAgents.get(0);
+        Collections.shuffle(SessionList.sessionListAvailableAgents);
+        if (sessionList.contains(session) && !SessionList.getAllAvailabelAgents().isEmpty() && !chatMap.containsKey(this.agentSession)) {
+            this.agentSession = SessionList.getAllAvailabelAgents().get(0).getSession();
+
             chatMap.put(this.agentSession, session);
+            chat=new Chat(SessionList.getAllAvailabelAgents().get(0),client);
+            storage.addChat(chat);
+            SessionList.getAllWaitingClients().remove(client);
             String msg1 = msg.getText();
             msg.setText("Connected");
             log.info("Agent connected to client: "+msg.getName());
@@ -128,7 +138,7 @@ public class ChatEndpoint {
             }
             story.printStory(session, this.agentSession, msg);
             msg.setText(msg1);
-            sessionListAvailableAgents.remove(0);
+            SessionList.getAllAvailabelAgents().remove(0);
         }
         if (chatMap.get(this.agentSession) != session) {
             if (!msg.getText().equals("Connected") && !msg.getText().equals("")) {
@@ -164,9 +174,13 @@ public class ChatEndpoint {
             }
             log.info("Client :"+msg.getName()+" disconnected");
             chatMap.remove(this.agentSession);
+//            SessionList.getAllClients().remove()
             sessionListAvailableAgents.add(this.agentSession);
             Collections.shuffle(sessionListAvailableAgents);
             leave = false;
+            if(SessionList.getAllAvailabelAgents().isEmpty()){
+                storage.addWaitingClient(client);
+            }
         } else if (msg.getRole().equals("client") && msg.getText().equals("/leave") && !chatMap.containsKey(this.agentSession)) {
             try {
                 msg.setName("");
