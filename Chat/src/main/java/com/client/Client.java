@@ -21,7 +21,7 @@ public class Client {
     private BufferedReader inputUser;
     private static String name;
     private static String role;
-    private static final String SERVER = "ws://localhost:8080/webChatApp_war/chat";
+    private static final String SERVER = "ws://localhost:8080/Chat_war/chat";
 
     private void Registration() {
         System.out.print("Registration: ");

@@ -36,6 +36,7 @@ public class ChatEndpoint {
 
     @OnOpen
     public void onOpen(Session session) {
+        System.out.println(session);
         log.info("Session opened :"+session);
         sessionList.add(session);
 
@@ -58,7 +59,8 @@ public class ChatEndpoint {
 
     @OnMessage
     public void onMessage(Session session, Message msg) {
-        if (msg.getRole().equals("agent") && !SessionList.getAllAvailabelAgents().contains(agent) && !MainCommands.chatMap.containsKey(session)) {
+        System.out.println(session);
+        if (msg.getRole().equals("agent") && !SessionList.getAllAvailableAgents().contains(agent) && !MainCommands.chatMap.containsKey(session)) {
             System.out.println(agent.getSession());
             agent = new Agent(session, msg.getName(), ConnectionType.WEBSOCKET);
             command.registerAgent(agent);
@@ -117,11 +119,11 @@ public class ChatEndpoint {
 //    }
 //    private void logIn(Session session,Message msg){
 //        Collections.shuffle(SessionList.sessionListAvailableAgents);
-//        if (sessionList.contains(session) && !SessionList.getAllAvailabelAgents().isEmpty() && !chatMap.containsKey(this.agentSession)) {
-//            this.agentSession = SessionList.getAllAvailabelAgents().get(0).getSession();
+//        if (sessionList.contains(session) && !SessionList.getAllAvailableAgents().isEmpty() && !chatMap.containsKey(this.agentSession)) {
+//            this.agentSession = SessionList.getAllAvailableAgents().get(0).getSession();
 //
 //            chatMap.put(this.agentSession, session);
-//            chat=new Chat(SessionList.getAllAvailabelAgents().get(0),client);
+//            chat=new Chat(SessionList.getAllAvailableAgents().get(0),client);
 //            storage.addChat(chat);
 //            SessionList.getAllWaitingClients().remove(client);
 //            String msg1 = msg.getText();
@@ -134,7 +136,7 @@ public class ChatEndpoint {
 //            }
 //            story.printStory(session, this.agentSession, msg);
 //            msg.setText(msg1);
-//            SessionList.getAllAvailabelAgents().remove(0);
+//            SessionList.getAllAvailableAgents().remove(0);
 //        }
 //        if (chatMap.get(this.agentSession) != session) {
 //            if (!msg.getText().equals("Connected") && !msg.getText().equals("")) {
@@ -174,7 +176,7 @@ public class ChatEndpoint {
 //            sessionListAvailableAgents.add(this.agentSession);
 //            Collections.shuffle(sessionListAvailableAgents);
 //            leave = false;
-//            if(SessionList.getAllAvailabelAgents().isEmpty()){
+//            if(SessionList.getAllAvailableAgents().isEmpty()){
 //                storage.addWaitingClient(client);
 //            }
 //        } else if (msg.getRole().equals("client") && msg.getText().equals("/leave") && !chatMap.containsKey(this.agentSession)) {

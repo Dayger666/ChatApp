@@ -1,5 +1,7 @@
 package com.storage;
 
+import com.entities.Message;
+
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -14,7 +16,7 @@ public class SessionList {
     private static HashMap<Long, Agent> allAgents = new HashMap<>();
     private static HashMap<Long, Client> allClients = new HashMap<>();
     private static HashMap<Long, Chat> allChats = new HashMap<>();
-    private static LinkedHashMap<Object, LinkedList<String>> restMessages = new LinkedHashMap<>();
+    private static LinkedHashMap<Object, LinkedList<Message>> restMessages = new LinkedHashMap<>();
 
     public static synchronized SessionList getInstance() {
         if (instance == null) {
@@ -39,7 +41,7 @@ public class SessionList {
     public void addChat(Chat chat){
         allChats.put(chat.getChatId(),chat);
     }
-    public void addRestMessages(String el, Object session) {
+    public void addRestMessages(Message el, Object session) {
         restMessages.computeIfAbsent(session, k -> new LinkedList<>()).add(el);
 
     }
@@ -54,7 +56,7 @@ public class SessionList {
         return allClients;
 
     }
-    public static synchronized LinkedList<Agent> getAllAvailabelAgents() {
+    public static synchronized LinkedList<Agent> getAllAvailableAgents() {
 
         return sessionListAvailableAgents;
 
@@ -69,7 +71,7 @@ public class SessionList {
         return allChats;
 
     }
-    public static synchronized LinkedHashMap<Object, LinkedList<String>> getRestMessages() {
+    public static synchronized LinkedHashMap<Object, LinkedList<Message>> getRestMessages() {
         return restMessages;
 
     }

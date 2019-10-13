@@ -3,10 +3,7 @@ package com.rest;
 import com.entities.ConnectionType;
 import com.entities.Message;
 import com.functional.MainCommands;
-import com.infoForRest.AllInfoAboutChat;
-import com.infoForRest.AllInfoAboutUser;
-import com.infoForRest.InfoAboutUser;
-import com.infoForRest.InfoAboutChat;
+import com.infoForRest.*;
 import com.storage.*;
 
 import org.springframework.http.HttpStatus;
@@ -56,7 +53,7 @@ public class MyRestController {
     @RequestMapping(value = "/allAvailableAgents", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<ArrayList<InfoAboutUser>> getAllAvailableAgents() {
         ArrayList<InfoAboutUser> result = new ArrayList<>();
-        for (Agent agent : SessionList.getAllAvailabelAgents()) {
+        for (Agent agent : SessionList.getAllAvailableAgents()) {
             result.add(new InfoAboutUser(agent));
         }
 
@@ -67,7 +64,7 @@ public class MyRestController {
     @RequestMapping(value = "/numberOfAvailableAgents", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Integer> getNumberOfAvailableAgents() {
         Integer number = 0;
-        for (Agent agent : SessionList.getAllAvailabelAgents()) {
+        for (Agent agent : SessionList.getAllAvailableAgents()) {
             number++;
         }
 
@@ -184,19 +181,23 @@ public class MyRestController {
 
 
     @RequestMapping(value = "/messages", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<LinkedList<String>> getMessages(HttpServletRequest request) {
-        LinkedList<String> messages=new LinkedList<>();
+    public ResponseEntity<LinkedList<RestMessages>> getMessages(HttpServletRequest request) {
+        LinkedList<RestMessages> result=new LinkedList<>();
         HttpSession session = request.getSession();
 
-        if (!MainCommands.allUsers.keySet().contains(session)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!MainCommands.allUsers.keySet().contains(session)){ return new ResponseEntity<>(HttpStatus.BAD_REQUEST);}
         if (SessionList.getRestMessages().size() > 0 && SessionList.getRestMessages().containsKey(session)) {
-            messages=SessionList.getRestMessages().get(session);
+            for (Message msg : SessionList.getRestMessages().get(session)) {
+            result.add(new RestMessages(msg));
+       }
+           // messages=SessionList.getRestMessages().get(session);
             SessionList.getRestMessages().remove(session);
 
         }
-//
-
-        return new ResponseEntity<>(messages, HttpStatus.OK);
+        else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
 
     }
 

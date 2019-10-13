@@ -92,7 +92,7 @@ public class MainCommands {
         User user=allUsers.get(session1);
         if(user.getType().equals(ConnectionType.HTTP)){
             System.out.println("qq");
-            storage.addRestMessages(msg.getText(),session1);
+            storage.addRestMessages(msg,session1);
         }
         else {
             user.sendMessage(msg);
@@ -110,7 +110,7 @@ public class MainCommands {
             SessionList.sessionListAvailableAgents.add(this.agent);
             Collections.shuffle(SessionList.sessionListAvailableAgents);
             leave = false;
-            if(SessionList.getAllAvailabelAgents().isEmpty()){
+            if(SessionList.getAllAvailableAgents().isEmpty()){
                 storage.addWaitingClient(client);
             }
         } else if (msg.getRole().equals("client") && msg.getText().equals("/leave") && !chatMap.containsKey(this.agentSession)) {
@@ -123,11 +123,11 @@ public class MainCommands {
     }
     private void tryToFindAgent(Object session, Message msg){
         Collections.shuffle(SessionList.sessionListAvailableAgents);
-        if (msg.getRole().equals("client")&&!SessionList.getAllAvailabelAgents().isEmpty() && !chatMap.containsKey(this.agentSession)) {
-            this.agentSession = SessionList.getAllAvailabelAgents().get(0).getSession();
-            this.agent=SessionList.getAllAvailabelAgents().get(0);
+        if (msg.getRole().equals("client")&&!SessionList.getAllAvailableAgents().isEmpty() && !chatMap.containsKey(this.agentSession)) {
+            this.agentSession = SessionList.getAllAvailableAgents().get(0).getSession();
+            this.agent=SessionList.getAllAvailableAgents().get(0);
             chatMap.put(this.agentSession, session);
-            Chat chat = new Chat(SessionList.getAllAvailabelAgents().get(0), client);
+            Chat chat = new Chat(SessionList.getAllAvailableAgents().get(0), client);
             storage.addChat(chat);
             SessionList.getAllWaitingClients().remove(client);
             String msg1 = msg.getText();
@@ -137,7 +137,7 @@ public class MainCommands {
             story=new Story();
             story.printStory(client.getSession(), this.agent.getSession(), msg);
             msg.setText(msg1);
-            SessionList.getAllAvailabelAgents().remove(0);
+            SessionList.getAllAvailableAgents().remove(0);
         }
 
     }
