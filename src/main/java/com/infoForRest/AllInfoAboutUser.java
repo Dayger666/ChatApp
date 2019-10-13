@@ -1,5 +1,6 @@
 package com.infoForRest;
 
+import com.entities.ConnectionType;
 import com.storage.User;
 
 import java.util.Date;
@@ -12,7 +13,7 @@ public class AllInfoAboutUser {
     private final String name;
 
     private final String regTime;
-
+    private ConnectionType type;
 
     public AllInfoAboutUser(long id, String name, Date regTime) {
         this.id = id;
@@ -39,6 +40,11 @@ public class AllInfoAboutUser {
         this.name = user.getName();
 
         this.regTime = user.getRegTime().toString();
+        this.type=user.getType();
 
+    }
+
+    public ConnectionType getType() {
+        return type;
     }
 }

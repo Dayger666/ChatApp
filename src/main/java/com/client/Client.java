@@ -1,5 +1,6 @@
 package com.client;
 
+import com.entities.ConnectionType;
 import com.entities.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,7 +36,7 @@ public class Client {
                         role = register1[1];
                         name = register1[2];
                         session = container.connectToServer(ClientEndpoint.class, URI.create(SERVER));
-                        Message msg = new Message(name, role, "Connected");
+                        Message msg = new Message(name, role, "Connected", ConnectionType.WEBSOCKET);
                         session.getBasicRemote().sendObject(msg);
 
                         break;
@@ -61,7 +62,7 @@ public class Client {
             try {
                 userWord = client.inputUser.readLine();
                 if(!userWord.equals("")) {
-                    Message msg = new Message(name, role, userWord);
+                    Message msg = new Message(name, role, userWord,ConnectionType.WEBSOCKET);
                     session.getBasicRemote().sendObject(msg);
                 }
                 if (userWord.equals("/exit")) {

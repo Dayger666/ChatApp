@@ -1,6 +1,7 @@
 package com.functional;
 
 
+import com.entities.ConnectionType;
 import com.entities.Message;
 import com.entities.Story;
 import com.storage.*;
@@ -81,7 +82,6 @@ public class MainCommands {
         }
     }
     public void sendMsg(Object session,Message msg){
-        System.out.println(session);
         tryToFindAgent(session,msg);
         Object session1=null;
         if(chatMap.containsKey(session)){
@@ -90,9 +90,13 @@ public class MainCommands {
             session1=this.agentSession;
         }
         User user=allUsers.get(session1);
-        System.out.println(session1);
-        System.out.println(msg.getText());
-        user.sendMessage(msg);
+        if(user.getType().equals(ConnectionType.HTTP)){
+            System.out.println("qq");
+            storage.addRestMessages(msg.getText(),session1);
+        }
+        else {
+            user.sendMessage(msg);
+        }
     }
 
     public boolean leave(Object session, Message msg){

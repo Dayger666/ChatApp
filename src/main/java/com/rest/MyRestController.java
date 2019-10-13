@@ -1,5 +1,6 @@
 package com.rest;
 
+import com.entities.ConnectionType;
 import com.entities.Message;
 import com.functional.MainCommands;
 import com.infoForRest.AllInfoAboutChat;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -28,7 +30,6 @@ public class MyRestController {
     private String role;
 
     @RequestMapping(value = "/allAgents", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-
     public ResponseEntity<ArrayList<InfoAboutUser>> getAllAgents() {
 
         ArrayList<InfoAboutUser> result = new ArrayList<>();
@@ -41,7 +42,6 @@ public class MyRestController {
     }
 
     @RequestMapping(value = "/infoAboutAgent/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-
     public ResponseEntity<AllInfoAboutUser> getInfoAboutAgent(@PathVariable("id") long id) {
 
         Agent agent = SessionList.getAllAgents().get(id);
@@ -54,7 +54,6 @@ public class MyRestController {
     }
 
     @RequestMapping(value = "/allAvailableAgents", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-
     public ResponseEntity<ArrayList<InfoAboutUser>> getAllAvailableAgents() {
         ArrayList<InfoAboutUser> result = new ArrayList<>();
         for (Agent agent : SessionList.getAllAvailabelAgents()) {
@@ -66,7 +65,6 @@ public class MyRestController {
     }
 
     @RequestMapping(value = "/numberOfAvailableAgents", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-
     public ResponseEntity<Integer> getNumberOfAvailableAgents() {
         Integer number = 0;
         for (Agent agent : SessionList.getAllAvailabelAgents()) {
@@ -78,7 +76,6 @@ public class MyRestController {
     }
 
     @RequestMapping(value = "/allWaitingClients", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-
     public ResponseEntity<ArrayList<InfoAboutUser>> getAllWaitingClients() {
         ArrayList<InfoAboutUser> result = new ArrayList<>();
         for (Client client : SessionList.getAllWaitingClients()) {
@@ -89,7 +86,6 @@ public class MyRestController {
     }
 
     @RequestMapping(value = "/allClients", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-
     public ResponseEntity<ArrayList<InfoAboutUser>> getAllClients() {
         ArrayList<InfoAboutUser> result = new ArrayList<>();
         for (Client client : SessionList.getAllClients().values()) {
@@ -100,7 +96,6 @@ public class MyRestController {
     }
 
     @RequestMapping(value = "/infoAboutClient/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-
     public ResponseEntity<AllInfoAboutUser> getInfoAboutClient(@PathVariable("id") long id) {
 
         Client client = SessionList.getAllClients().get(id);
@@ -113,7 +108,6 @@ public class MyRestController {
     }
 
     @RequestMapping(value = "/allChats", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-
     public ResponseEntity<ArrayList<InfoAboutChat>> getAllChats() {
 
         ArrayList<InfoAboutChat> result = new ArrayList<>();
@@ -126,7 +120,6 @@ public class MyRestController {
     }
 
     @RequestMapping(value = "/infoAboutChat/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-
     public ResponseEntity<AllInfoAboutChat> getInfoAboutChat(@PathVariable("id") long id) {
 
         Chat chat = SessionList.getAllChats().get(id);
@@ -139,20 +132,17 @@ public class MyRestController {
     }
 
     @RequestMapping(value = "/registerAgent/{name}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-
     public ResponseEntity regAgent(@PathVariable("name") String name, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
 
         if (MainCommands.allUsers.keySet().contains(session)) return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
-        HttpAgent agent = new HttpAgent(request.getSession(), name);
+        HttpAgent agent = new HttpAgent(request.getSession(), name,ConnectionType.HTTP);
         this.role = "agent";
         this.name = name;
 
         command.registerAgent(agent);
-
-//        this.name = name;
 
         return new ResponseEntity(HttpStatus.OK);
 
@@ -160,14 +150,13 @@ public class MyRestController {
 
 
     @RequestMapping(value = "/registerClient/{name}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-
     public ResponseEntity regClient(@PathVariable("name") String name, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
 
         if (MainCommands.allUsers.keySet().contains(session)) return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
-        HttpClient client = new HttpClient(request.getSession(), name);
+        HttpClient client = new HttpClient(request.getSession(), name,ConnectionType.HTTP);
 
         command.registerClient(client);
         this.role = "client";
@@ -179,14 +168,13 @@ public class MyRestController {
 
 
     @RequestMapping(value = "/sendMessage/{text}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-
     public ResponseEntity sendMessage(@PathVariable("text") String text, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
 
         if (!MainCommands.allUsers.keySet().contains(session)) return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
-        Message msg = new Message(name, role, text);
+        Message msg = new Message(name, role, text,ConnectionType.HTTP);
 
         command.sendMsg(session, msg);
 
@@ -195,30 +183,31 @@ public class MyRestController {
     }
 
 
-//    @RequestMapping(value = "/messages", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-//
-//    public ResponseEntity<ArrayList<Message>> getMessages(HttpServletRequest request) {
-//
-//        HttpSession session = request.getSession();
-//
-//        if (!storage.getAllUsers().keySet().contains(session)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//
-//        HttpUser httpUser = (HttpUser) storage.getAllUsers().get(session);
-//
-//        return new ResponseEntity<>(httpUser.getMessages(), HttpStatus.OK);
-//
-//    }
+    @RequestMapping(value = "/messages", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<LinkedList<String>> getMessages(HttpServletRequest request) {
+        LinkedList<String> messages=new LinkedList<>();
+        HttpSession session = request.getSession();
 
+        if (!MainCommands.allUsers.keySet().contains(session)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (SessionList.getRestMessages().size() > 0 && SessionList.getRestMessages().containsKey(session)) {
+            messages=SessionList.getRestMessages().get(session);
+            SessionList.getRestMessages().remove(session);
+
+        }
+//
+
+        return new ResponseEntity<>(messages, HttpStatus.OK);
+
+    }
 
     @RequestMapping(value = "/leave", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-
     public ResponseEntity leaveChat(HttpServletRequest request) {
 
         HttpSession session = request.getSession();
 
         if (!MainCommands.allUsers.keySet().contains(session)) return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
-        Message msg = new Message(name, role, "/leave");
+        Message msg = new Message(name, role, "/leave",ConnectionType.HTTP);
         command.leave(session, msg);
 
 
@@ -228,14 +217,13 @@ public class MyRestController {
 
 
     @RequestMapping(value = "/exit", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-
     public ResponseEntity exitChat(HttpServletRequest request) {
 
         HttpSession session = request.getSession();
 
         if (!MainCommands.allUsers.keySet().contains(session)) return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
-        Message msg = new Message(name, role, "/exit");
+        Message msg = new Message(name, role, "/exit", ConnectionType.HTTP);
         command.exit(session, msg);
 
 

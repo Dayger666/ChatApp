@@ -2,6 +2,7 @@ package com.endpoints;
 
 import com.coders.MessageDecoder;
 import com.coders.MessageEncoder;
+import com.entities.ConnectionType;
 import com.entities.Message;
 import com.entities.Story;
 import com.functional.MainCommands;
@@ -59,13 +60,13 @@ public class ChatEndpoint {
     public void onMessage(Session session, Message msg) {
         if (msg.getRole().equals("agent") && !SessionList.getAllAvailabelAgents().contains(agent) && !MainCommands.chatMap.containsKey(session)) {
             System.out.println(agent.getSession());
-            agent = new Agent(session, msg.getName());
+            agent = new Agent(session, msg.getName(), ConnectionType.WEBSOCKET);
             command.registerAgent(agent);
             log.info(msg.getRole()+"|"+msg.getName()+" registered");
         }
         else if(msg.getRole().equals("client")&& !SessionList.getAllWaitingClients().contains(client)&&MainCommands.chatMap.get(agent.getSession())!=session)
         {
-            client=new Client(session,msg.getName());
+            client=new Client(session,msg.getName(),ConnectionType.WEBSOCKET);
             command.registerClient(client);
         }
         if (msg.getText().equals("/exit")) {

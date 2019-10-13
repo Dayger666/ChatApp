@@ -4,23 +4,25 @@ import lombok.Data;
 
 @Data
 public class Message {
-    public Message(String name, String role, String text,MessageType type) {
+//    public Message(String name, String role, String text,MessageType type) {
+//        this.name = name;
+//        this.role = role;
+//        this.text = text;
+//        this.type=type;
+//    }
+    public Message(String name, String role, String text,ConnectionType type) {
         this.name = name;
         this.role = role;
         this.text = text;
         this.type=type;
     }
-    public Message(String name, String role, String text) {
-        this.name = name;
-        this.role = role;
-        this.text = text;
-    }
 
     private String name;
     private String role;
     private String text;
-    private MessageType type;
-    private int index=0;
+    private ConnectionType type;
+//    private MessageType type;
+
 
     public void setText(String text) {
         this.text = text;
@@ -47,5 +49,12 @@ public class Message {
     }
 
 
+    public ConnectionType getType() {
+        return type;
+    }
+
+    public void setType(ConnectionType type) {
+        this.type = type;
+    }
 }
 
