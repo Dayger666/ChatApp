@@ -1,6 +1,6 @@
 package com.storage;
 
-import com.IdGenerator;
+import com.functional.IdGenerator;
 import com.entities.ConnectionType;
 import com.entities.Message;
 

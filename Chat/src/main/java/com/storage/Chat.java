@@ -1,6 +1,6 @@
 package com.storage;
 
-import com.IdGenerator;
+import com.functional.IdGenerator;
 
 import java.time.Instant;
 

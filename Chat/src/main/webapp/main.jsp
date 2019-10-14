@@ -165,7 +165,7 @@
                 }
             },
             openSocket() {
-                this.ws = new WebSocket("ws://localhost:8080/Chat_war/chat");
+                this.ws = new WebSocket("ws://localhost:8080/consoleWebRestChat_war/chat");
                 this.ws.onopen = () => this.onOpenSock();
                 this.ws.onmessage = (e) => this.onMessage(JSON.parse(e.data));
                 this.ws.onclose = (e) => this.onClose();

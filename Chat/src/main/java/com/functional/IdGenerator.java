@@ -1,4 +1,4 @@
-package com;
+package com.functional;
 
 public class IdGenerator {
     private long userId = 0;
