@@ -9,10 +9,7 @@ import com.storage.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -27,14 +24,18 @@ public class MyRestController {
     private String role;
 
     @RequestMapping(value = "/allAgents", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ArrayList<InfoAboutUser>> getAllAgents() {
+    public ResponseEntity<ArrayList<InfoAboutUser>> getAllAgents(@RequestParam(name = "pageNumber",required = false,defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize",required = false,defaultValue = "10") int pageSize) {
 
         ArrayList<InfoAboutUser> result = new ArrayList<>();
+        ArrayList<InfoAboutUser> resultWithPagination = new ArrayList<>();
         for (Agent agent : SessionList.getAllAgents().values()) {
             result.add(new InfoAboutUser(agent));
         }
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        for(int i=pageNumber*pageSize;i<pageNumber*pageSize+pageSize&&i<result.size();i++)
+        {
+            resultWithPagination.add(result.get(i));
+        }
+        return new ResponseEntity<>(resultWithPagination, HttpStatus.OK);
 
     }
 
@@ -51,13 +52,18 @@ public class MyRestController {
     }
 
     @RequestMapping(value = "/allAvailableAgents", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ArrayList<InfoAboutUser>> getAllAvailableAgents() {
+    public ResponseEntity<ArrayList<InfoAboutUser>> getAllAvailableAgents(@RequestParam(name = "pageNumber",required = false,defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize",required = false,defaultValue = "10") int pageSize) {
         ArrayList<InfoAboutUser> result = new ArrayList<>();
+        ArrayList<InfoAboutUser> resultWithPagination = new ArrayList<>();
         for (Agent agent : SessionList.getAllAvailableAgents()) {
             result.add(new InfoAboutUser(agent));
         }
+        for(int i=pageNumber*pageSize;i<pageNumber*pageSize+pageSize&&i<result.size();i++)
+        {
+            resultWithPagination.add(result.get(i));
+        }
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(resultWithPagination, HttpStatus.OK);
 
     }
 
@@ -73,22 +79,32 @@ public class MyRestController {
     }
 
     @RequestMapping(value = "/allWaitingClients", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ArrayList<InfoAboutUser>> getAllWaitingClients() {
+    public ResponseEntity<ArrayList<InfoAboutUser>> getAllWaitingClients(@RequestParam(name = "pageNumber",required = false,defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize",required = false,defaultValue = "10") int pageSize) {
         ArrayList<InfoAboutUser> result = new ArrayList<>();
+        ArrayList<InfoAboutUser> resultWithPagination = new ArrayList<>();
         for (Client client : SessionList.getAllWaitingClients()) {
             result.add(new InfoAboutUser(client));
         }
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        for(int i=pageNumber*pageSize;i<pageNumber*pageSize+pageSize&&i<result.size();i++)
+        {
+            resultWithPagination.add(result.get(i));
+        }
+        return new ResponseEntity<>(resultWithPagination, HttpStatus.OK);
 
     }
 
     @RequestMapping(value = "/allClients", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ArrayList<InfoAboutUser>> getAllClients() {
+    public ResponseEntity<ArrayList<InfoAboutUser>> getAllClients(@RequestParam(name = "pageNumber",required = false,defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize",required = false,defaultValue = "10") int pageSize) {
         ArrayList<InfoAboutUser> result = new ArrayList<>();
+        ArrayList<InfoAboutUser> resultWithPagination = new ArrayList<>();
         for (Client client : SessionList.getAllClients().values()) {
             result.add(new InfoAboutUser(client));
         }
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        for(int i=pageNumber*pageSize;i<pageNumber*pageSize+pageSize&&i<result.size();i++)
+        {
+            resultWithPagination.add(result.get(i));
+        }
+        return new ResponseEntity<>(resultWithPagination, HttpStatus.OK);
 
     }
 
@@ -105,14 +121,19 @@ public class MyRestController {
     }
 
     @RequestMapping(value = "/allChats", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ArrayList<InfoAboutChat>> getAllChats() {
+    public ResponseEntity<ArrayList<InfoAboutChat>> getAllChats(@RequestParam(name = "pageNumber",required = false,defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize",required = false,defaultValue = "10") int pageSize) {
 
         ArrayList<InfoAboutChat> result = new ArrayList<>();
+        ArrayList<InfoAboutChat> resultWithPagination = new ArrayList<>();
         for (Chat chat : SessionList.getAllChats().values()) {
             result.add(new InfoAboutChat(chat));
         }
+        for(int i=pageNumber*pageSize;i<pageNumber*pageSize+pageSize&&i<result.size();i++)
+        {
+            resultWithPagination.add(result.get(i));
+        }
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(resultWithPagination, HttpStatus.OK);
 
     }
 
