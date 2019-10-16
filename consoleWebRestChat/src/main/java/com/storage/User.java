@@ -1,6 +1,6 @@
 package com.storage;
 
-import com.functional.IdGenerator;
+import com.functional.Id;
 import com.entities.ConnectionType;
 import com.entities.Message;
 
@@ -22,14 +22,14 @@ public abstract class User {
         this.session=session;
         this.name = name;
         this.regTime = new Date();
-        this.userId= IdGenerator.getInstance().getUserId();
+        this.userId= Id.getInstance().getUserId();
         this.type=type;
     }
 
     User(String name) {
         this.name=name;
         this.regTime = new Date();
-        this.userId= IdGenerator.getInstance().getUserId();
+        this.userId= Id.getInstance().getUserId();
     }
 
 User(){

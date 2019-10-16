@@ -4,12 +4,6 @@ import lombok.Data;
 
 @Data
 public class Message {
-//    public Message(String name, String role, String text,MessageType type) {
-//        this.name = name;
-//        this.role = role;
-//        this.text = text;
-//        this.type=type;
-//    }
     public Message(String name, String role, String text,ConnectionType type) {
         this.name = name;
         this.role = role;
@@ -21,7 +15,6 @@ public class Message {
     private String role;
     private String text;
     private ConnectionType type;
-//    private MessageType type;
 
 
     public void setText(String text) {

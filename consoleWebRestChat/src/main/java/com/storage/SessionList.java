@@ -2,14 +2,14 @@ package com.storage;
 
 import com.entities.Message;
 
-import java.util.ArrayDeque;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 public class SessionList {
 
-    private final static String SERVER_NAME = "Server";
+
     private static SessionList instance;
     public static LinkedList<Agent> sessionListAvailableAgents = new LinkedList<>();
     private static LinkedList<Client> waitingListClients = new LinkedList<>();

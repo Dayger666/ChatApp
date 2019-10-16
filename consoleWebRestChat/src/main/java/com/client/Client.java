@@ -6,7 +6,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-import javax.websocket.*;
+import javax.websocket.ContainerProvider;
+import javax.websocket.DeploymentException;
+import javax.websocket.EncodeException;
+import javax.websocket.Session;
+import javax.websocket.WebSocketContainer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,7 +25,7 @@ public class Client {
     private BufferedReader inputUser;
     private static String name;
     private static String role;
-    private static final String SERVER = "ws://localhost:8080/Chat_war/chat";
+    private static final String SERVER = "ws://localhost:8080/consoleWebRestChat_war/chat";
 
     private void Registration() {
         System.out.print("Registration: ");
