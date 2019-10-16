@@ -18,7 +18,7 @@
   </properties>
 
     <modules>
-        <module>Chat</module>
+      <module>consoleWebRestChat</module>
     </modules>
 
 </project>

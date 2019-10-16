@@ -1,21 +1,21 @@
 package com.functional;
 
-public class IdGenerator {
+public class Id {
     private long userId = 0;
     private long chatId = 0;
 
-    private static IdGenerator instance;
+    private static Id instance;
 
 
-    public static synchronized IdGenerator getInstance(){
+    public static synchronized Id getInstance(){
         if (instance == null){
-            instance = new IdGenerator();
+            instance = new Id();
         }
         return instance;
     }
 
 
-    private IdGenerator(){}
+    private Id(){}
 
     public synchronized long getUserId(){
         return ++userId;

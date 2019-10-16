@@ -1,6 +1,6 @@
 package com.storage;
 
-import com.functional.IdGenerator;
+import com.functional.Id;
 
 import java.time.Instant;
 
@@ -15,7 +15,7 @@ public class Chat {
         this.nameAgent=agent.getName();
         this.nameClient=client.getName();
         this.regTime= starts;
-        this.chatId= IdGenerator.getInstance().getChatId();
+        this.chatId= Id.getInstance().getChatId();
 
     }
 
