@@ -2,13 +2,11 @@ package com.storage;
 
 import com.entities.Message;
 
-
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 public class SessionList {
-
 
     private static SessionList instance;
     public static LinkedList<Agent> sessionListAvailableAgents = new LinkedList<>();

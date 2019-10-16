@@ -4,7 +4,11 @@ package com.functional;
 import com.entities.ConnectionType;
 import com.entities.Message;
 import com.entities.Story;
-import com.storage.*;
+import com.storage.Agent;
+import com.storage.Chat;
+import com.storage.Client;
+import com.storage.SessionList;
+import com.storage.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,13 +54,13 @@ public class MainCommands {
             msg.setText("Disconnected");
             sendMsg(session,msg);
             chatMap.remove(session);
-            log.info("Agent :"+msg.getName()+" /exit : ");
+           log.info("Agent :"+msg.getName()+" /exit : ");
         }
 
         if(msg.getRole().equals("client")) {
             SessionList.getAllClients().remove(client.getUserId());
             SessionList.getAllWaitingClients().remove(client);
-            log.info("Client :" + msg.getName() + " /exit: ");
+           log.info("Client :" + msg.getName() + " /exit: ");
         }
         else if(msg.getRole().equals("agent"))
         {
@@ -82,9 +86,9 @@ public class MainCommands {
 
             }
         } else {
-            if (!msg.getText().equals("")) {
-                sendMsg(session,msg);
-            }
+                if (!msg.getText().equals("")) {
+                    sendMsg(session,msg);
+                }
         }
     }
     public void sendMsg(Object session,Message msg){
@@ -97,27 +101,27 @@ public class MainCommands {
             session1=this.agentSession;
         }
         if (allUsers.get(session1)==null) {
-            session1=session;
+       session1=session;
         }
-        User user = allUsers.get(session1);
-        if (user.getType() == (ConnectionType.HTTP)) {
-            storage.addRestMessages(msg, session1);
-        } else {
-            user.sendMessage(msg);
-        }
+            User user = allUsers.get(session1);
+            if (user.getType() == (ConnectionType.HTTP)) {
+                storage.addRestMessages(msg, session1);
+            } else {
+                user.sendMessage(msg);
+            }
 
     }
 
     public boolean leave(Object session, Message msg){
         boolean leave = true;
         if (msg.getRole().equals("client") && msg.getText().equals("/leave") && chatMap.containsKey(this.agentSession)) {
-            msg.setText("Disconnected");
-            sendMsg(session,msg);
+                msg.setText("Disconnected");
+                sendMsg(session,msg);
             log.info("Client :"+msg.getName()+" disconnected");
             System.out.println("this"+this.agentSession);
             chatMap.remove(this.agentSession);
             chatMap.remove(this.agent.getSession());
-            // SessionList.getAllClients().remove()
+           // SessionList.getAllClients().remove()
             SessionList.sessionListAvailableAgents.add(this.agent);
             Collections.shuffle(SessionList.sessionListAvailableAgents);
             leave = false;
@@ -125,7 +129,7 @@ public class MainCommands {
                 storage.addWaitingClient(client);
             }
         } else if (msg.getRole().equals("client") && msg.getText().equals("/leave") && !chatMap.containsKey(this.agentSession)) {
-            leave = false;
+                leave = false;
         }
         return leave;
     }

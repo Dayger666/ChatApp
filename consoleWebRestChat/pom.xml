@@ -33,9 +33,7 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.25</version>
             <scope>test</scope>
-
         </dependency>
-
         <dependency>
             <groupId>org.glassfish.tyrus.bundles</groupId>
             <artifactId>tyrus-standalone-client</artifactId>
@@ -215,7 +213,7 @@
 
     <build>
         <finalName>webChatApp</finalName>
-
+        
         <plugins>
 
             <plugin>
