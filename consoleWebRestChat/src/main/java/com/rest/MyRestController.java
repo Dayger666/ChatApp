@@ -220,7 +220,6 @@ public class MyRestController {
             for (Message msg : SessionList.getRestMessages().get(session)) {
             result.add(new RestMessages(msg));
        }
-           // messages=SessionList.getRestMessages().get(session);
             SessionList.getRestMessages().remove(session);
 
         }

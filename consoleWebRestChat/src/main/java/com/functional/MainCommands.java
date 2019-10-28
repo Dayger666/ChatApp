@@ -101,9 +101,13 @@ public class MainCommands {
         }
             User user = allUsers.get(session1);
             if (user.getType() == (ConnectionType.HTTP)) {
-                storage.addRestMessages(msg, session1);
+               if(!msg.getText().equals("Connected")) {
+                   storage.addRestMessages(msg, session1);
+               }
             } else {
-                user.sendMessage(msg);
+                if(!msg.getText().equals("")) {
+                    user.sendMessage(msg);
+                }
             }
 
     }
@@ -117,7 +121,6 @@ public class MainCommands {
             System.out.println("this"+this.agentSession);
             chatMap.remove(this.agentSession);
             chatMap.remove(this.agent.getSession());
-           // SessionList.getAllClients().remove()
             SessionList.sessionListAvailableAgents.add(this.agent);
             Collections.shuffle(SessionList.sessionListAvailableAgents);
             leave = false;
@@ -141,11 +144,20 @@ public class MainCommands {
             storage.addChat(chat);
             SessionList.getAllWaitingClients().remove(client);
             String msg1 = msg.getText();
-            msg.setText("Connected");
+            User user1 = allUsers.get(session);
+            User user2 =allUsers.get(agentSession);
+            if (user1.getType() != (ConnectionType.HTTP)&&user2.getType() != (ConnectionType.HTTP)) {
+                msg.setText("Connected");
+                sendMsg(session, msg);
+                story=new Story();
+                sendMsg(session,story.printStory(session, msg));
+            }
+            else if(user1.getType() == (ConnectionType.HTTP)){
+                 user1 = allUsers.get(this.agentSession);
+                 msg.setText("Connected");
+                 user1.sendMessage(msg);
+            }
             log.info(this.agent.getName()+" connected to client : "+msg.getName());
-            sendMsg(session,msg);
-            story=new Story();
-            sendMsg(session,story.printStory(session, msg));
             SessionList.getAllAvailableAgents().remove(0);
             msg.setText(msg1);
         }

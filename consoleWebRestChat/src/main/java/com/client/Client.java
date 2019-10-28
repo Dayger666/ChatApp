@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 
 
-//mvn exec:java -Dexec.mainClass=client.Client
+//mvn exec:java -Dexec.mainClass=com.client.Client
 public class Client {
     private static final Logger log = LogManager.getLogger(Client.class);
     private static Session session;
@@ -49,7 +49,7 @@ public class Client {
             }
         } catch (IOException ignored) {
         } catch (DeploymentException | EncodeException e) {
-           log.error("Error : "+e);
+           log.error("Error : " + e);
         }
     }
 

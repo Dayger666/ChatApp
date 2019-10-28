@@ -98,7 +98,6 @@
             },
             bindEvents() {
 
-                // this.startBtn.addEventListener("click", e => this.openSocket());
 
                 this.startSendBtn.addEventListener("click", e => {
                     if (this.msgTextArea.value) {
@@ -106,13 +105,7 @@
                     }
                 });
 
-                // this.msgTextArea.addEventListener("keyup",e=>{
-                //     if(e.keyCode===13)
-                //     {
-                //         e.preventDefault();
-                //         this.send(this.msgTextArea.value);
-                //     }
-                // })
+
             },
             send() {
                 if (!check) {
